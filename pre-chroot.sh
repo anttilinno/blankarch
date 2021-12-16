@@ -4,7 +4,7 @@
 set -o nounset                                  # Treat unset variables as an error
 
 # Check network connection
-if nc -zw1 google.com 443; then
+if nc -zw1 arhlinux.org 443; then
     echo "Detected internet connectivity ..."
 else
     echo "Failed to detect internet connection!"
@@ -29,8 +29,3 @@ pacstrap /mnt base linux linux-firmware
 # Write fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# Copy chroot.sh script to rooted environment
-cp chroot.sh /mnt
-
-# Chroot into newly created environment
-arch-chroot /mnt
