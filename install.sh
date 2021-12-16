@@ -8,7 +8,9 @@ else
   echo "No .env file found!"
 fi
 
-sh -c pre-chroot.sh
+./pre-chroot.sh
 
-# Chroot into newly created environment
-arch-chroot /mnt /bin/sh -c chroot.sh
+# Run rest of the commands in chroot
+cp .env /mnt
+cp chroot.sh /mnt
+arch-chroot /mnt ./chroot.sh

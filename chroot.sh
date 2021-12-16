@@ -2,6 +2,9 @@
 
 set -o nounset                                  # Treat unset variables as an error
 
+# Read variables
+. ./.env
+
 # Timezone
 ln -sf /usr/share/zoneinfo/Europe/Tallinn /etc/localtime
 

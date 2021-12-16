@@ -4,7 +4,7 @@
 set -o nounset                                  # Treat unset variables as an error
 
 # Check network connection
-if nc -zw1 arhlinux.org 443; then
+if nc -zw1 archlinux.org 443; then
     echo "Detected internet connectivity ..."
 else
     echo "Failed to detect internet connection!"
