@@ -2,6 +2,8 @@
 
 set -o nounset                                  # Treat unset variables as an error
 
+NEW_USER=${NEW_USER:-antti}
+
 # More of base packages
 pacman -S --noconfirm base-devel zsh
 
