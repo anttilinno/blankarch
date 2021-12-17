@@ -73,3 +73,5 @@ arch-chroot /mnt /root/part2.sh
 
 # Stuff here to do after exiting the chroot ... reboot perhaps.
 rm /mnt/root/part2.sh
+
+reboot
