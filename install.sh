@@ -39,7 +39,7 @@ echo "blank" > /etc/hostname
 echo "root:$ROOT_PASSWORD" | chpasswd
 
 # Install system packages
-pacman -S --noconfirm neovim git syslinux openssh
+pacman -S --noconfirm neovim git syslinux openssh ansible
 
 # Configure network
 systemctl enable systemd-networkd.service
