@@ -2,6 +2,8 @@
 
 set -o nounset                                  # Treat unset variables as an error
 
+ROOT_PASSWORD=${ROOT_PASSWORD:-youforgotagain}
+
 # Create primary partition
 echo ';' | sfdisk /dev/sda
 
