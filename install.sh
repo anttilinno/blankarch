@@ -55,10 +55,10 @@ Name=enp0s3
 DHCP=yes
 NET
 
-cat <<'NET' >> /etc/resolv.conf
+cat <<'RESOLV' > /etc/resolv.conf
 nameserver 1.1.1.1
 nameserver 1.0.0.1
-NET
+RESOLV
 
 # Configure boot loader
 syslinux-install_update -i -a -m
