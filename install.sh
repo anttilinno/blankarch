@@ -53,6 +53,11 @@ Name=enp0s3
 DHCP=yes
 NET
 
+cat <<'NET' >> /etc/resolv.conf
+nameserver 1.1.1.1
+nameserver 1.0.0.1
+NET
+
 # Configure boot loader
 syslinux-install_update -i -a -m
 sed -i -e 's/sda3/sda1/' /boot/syslinux/syslinux.cfg
@@ -65,4 +70,4 @@ chmod a+x /mnt/root/part2.sh
 arch-chroot /mnt /root/part2.sh
 
 # Stuff here to do after exiting the chroot ... reboot perhaps.
-# ...
+rm /mnt/root/part2.sh

@@ -3,43 +3,47 @@
 set -o nounset                                  # Treat unset variables as an error
 
 # More of base packages
-pacman -S base-devel zsh
+pacman -S --noconfirm base-devel zsh
 
 # Xorg packages
-pacman -S xorg-server xorg-xinit xf86-video-intel
+pacman -S --noconfirm xorg-server xorg-xinit xf86-video-intel
 
 # WM packages
-pacman -S i3-gaps i3status xfce4-terminal rofi starship noto-fonts-emoji
+pacman -S --noconfirm i3-gaps i3status xfce4-terminal rofi starship noto-fonts-emoji
 
 # VBox special
-pacman -S virtualbox-guest-utils
-systemctl enable virtualbox.service
+pacman -S --noconfirm virtualbox-guest-utils
+systemctl enable vboxservice.service
 
 # Create user
-useradd -m -G wheel, uucp -s /bin/zsh $NEW_USER
-passwd $NEW_USER
+useradd -m -G wheel,uucp -s /bin/zsh "${NEW_USER}"
+passwd "${NEW_USER}"
+
+# Modify sudo
+echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/wheel
+chmod 0400 /etc/sudoers.d/wheel
 
 # Make conf directories and copy files
-mkdir -p "/home/${NEW_USER}/i3"
-mkdir -p "/home/${NEW_USER}/xfce4/terminal"
+mkdir -p "/home/${NEW_USER}/.config/i3"
+mkdir -p "/home/${NEW_USER}/.config/xfce4/terminal"
 
 cp config/.zshrc "/home/${NEW_USER}/"
 cp config/.zprofile "/home/${NEW_USER}/"
 cp config/.xinitrc "/home/${NEW_USER}/"
 
-cp config/i3.config "/home/${NEW_USER}/.config/i3/config/"
+cp config/i3.config "/home/${NEW_USER}/.config/i3/config"
 cp config/terminalrc "/home/${NEW_USER}/.config/xfce4/terminal/"
 cp config/starship.toml "/home/${NEW_USER}/.config/"
 
 chown -R "${NEW_USER}:${NEW_USER}" "/home/${NEW_USER}"
 
 # Install user packages
-su - $NEW_USER
+su - "${NEW_USER}" << "EOF"
 
 # Install yay
 git clone https://aur.archlinux.org/yay-bin.git
 cd yay-bin
-makepkg -si
+makepkg -si --noconfirm
 cd ..
 rm -rf yay-bin
 
@@ -47,5 +51,6 @@ rm -rf yay-bin
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Install librewolf
-yay -S librewolf-bin
+yay -S --noconfirm librewolf-bin
+EOF
 
