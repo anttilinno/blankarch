@@ -8,7 +8,7 @@ NEW_USER=${NEW_USER:-antti}
 pacman -S --noconfirm base-devel zsh
 
 # Xorg packages
-pacman -S --noconfirm xorg-server xorg-xinit xf86-video-intel
+pacman -S --noconfirm xorg-server xorg-xinit xf86-video-intel xf86-video-vmware
 
 # WM packages
 pacman -S --noconfirm i3-gaps i3status xfce4-terminal rofi starship noto-fonts-emoji
