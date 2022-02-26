@@ -11,7 +11,7 @@ pacman -S --noconfirm base-devel zsh
 pacman -S --noconfirm xorg-server xorg-xinit xf86-video-intel xf86-video-vmware
 
 # WM packages
-pacman -S --noconfirm i3-gaps i3status xfce4-terminal rofi starship noto-fonts-emoji
+pacman -S --noconfirm i3-gaps i3status xfce4-terminal rofi starship noto-fonts-emoji xsel httpie
 
 # VBox special
 pacman -S --noconfirm virtualbox-guest-utils
