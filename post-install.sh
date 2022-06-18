@@ -11,7 +11,10 @@ pacman -S --noconfirm base-devel zsh
 pacman -S --noconfirm xorg-server xorg-xinit xf86-video-intel xf86-video-vmware
 
 # WM packages
-pacman -S --noconfirm i3-gaps i3status xfce4-terminal rofi starship noto-fonts-emoji xsel httpie
+pacman -S --noconfirm i3-gaps i3status xfce4-terminal rofi starship noto-fonts-emoji xsel httpie ttf-jetbrains-mono
+
+# User packages
+pacman -S ripgrep bat exa
 
 # VBox special
 pacman -S --noconfirm virtualbox-guest-utils
@@ -50,9 +53,9 @@ cd ..
 rm -rf yay-bin
 
 # Install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # Install librewolf
-yay -S --noconfirm librewolf-bin
+yay -S --noconfirm librewolf-bin vscodium-bin
 EOF
 
