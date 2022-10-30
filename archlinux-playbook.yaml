@@ -1,0 +1,102 @@
+---
+  - name: "Setup ArchLinux developing environment"
+    become: yes
+    hosts: archlinux
+
+    tasks:
+    - name: Remove virtualbox nox utils
+      community.general.pacman:
+        name:
+          - virtualbox-guest-utils-nox
+        state: removed
+        update_cache: true
+    - name: Install base packages
+      community.general.pacman:
+        name:
+          - neovim
+          - git
+          - base-devel
+          - zsh
+          - xorg-server
+          - xorg-xinit
+          - xf86-video-vmware
+          - i3-gaps
+          - i3status
+          - xfce4-terminal
+          - rofi
+          - starship
+          - noto-fonts-emoji
+          - xsel
+          - httpie
+          - ttf-jetbrains-mono
+          - ripgrep
+          - bat
+          - exa
+          - virtualbox-guest-utils
+        state: latest
+        update_cache: true
+    - name: Enable virtualbox service
+      ansible.builtin.service:
+        name: vboxservice
+        state: started
+    - name: Modify sudoers file
+      ansible.builtin.copy:
+        content: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        dest: /etc/sudoers.d/wheel
+        mode: '0400'
+        owner: root
+        group: root
+    - name: Add user antti
+      ansible.builtin.user:
+        name: antti
+        password: $6$AGa1f5P0XzaHiqeg$qkhjY9T1FMQPnObqRZOgmfFB7GZym615vn5i1ccV3CpW2NSAOge4zmvwL6H5F43zBKXgMoWfLJoAsj6Ku2SSE1
+        shell: /bin/zsh
+        append: yes
+        groups: wheel
+    - name: Create config directory for antti
+      ansible.builtin.file:
+        path: /home/antti/.config/i3
+        state: directory
+        owner: antti
+        group: antti
+        mode: '0755'
+        recursive: yes
+    - name: Create terminal config directory for antti
+      ansible.builtin.file:
+        path: /home/antti/.config/xfce4/terminal
+        state: directory
+        owner: antti
+        group: antti
+        mode: '0755'
+        recursive: yes
+    - name: Copy user root config files
+      ansible.builtin.copy:
+        src:
+          - config/.zshrc
+          - config/.zprofile
+          - config/.xinitrc
+        dest: /home/antti/
+        owner: antti
+        group: antti
+        mode: u+rw,g-wx,o-wx
+    - name: Copy wm config files for user
+      ansible.builtin.copy:
+        src: config/i3.config
+        dest: /home/antti/.config/i3/config/
+        owner: antti
+        group: antti
+        mode: u+rw,g-wx,o-wx
+    - name: Copy terminal config files for user
+      ansible.builtin.copy:
+        src: config/terminalrc
+        dest: /home/antti/.config/xfce4/terminal/
+        owner: antti
+        group: antti
+        mode: u+rw,g-wx,o-wx
+    - name: Copy starship config files for user
+      ansible.builtin.copy:
+        src: config/starship.toml
+        dest: /home/antti/.config/
+        owner: antti
+        group: antti
+        mode: u+rw,g-wx,o-wx
