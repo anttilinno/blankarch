@@ -49,7 +49,7 @@
     - name: Add user antti
       ansible.builtin.user:
         name: antti
-        password: $6$KC0exO4oc5IYLgff$XhMljirsmi0Mng0DjVS2zTAyNjuQkKQR19.rkP2PYSUnLVLqQ9pkCJM8XF8yf.E9vH1HHYkQNzgoNtje0IDph0
+        password: $6$AGa1f5P0XzaHiqeg$qkhjY9T1FMQPnObqRZOgmfFB7GZym615vn5i1ccV3CpW2NSAOge4zmvwL6H5F43zBKXgMoWfLJoAsj6Ku2SSE1
         shell: /bin/zsh
         append: yes
         groups: wheel
