@@ -5,4 +5,4 @@ Or run ansible after blank install
 ansible-playbook -i inventory.yml archlinux-playbook.yml
 ```
 
-User password from playbook is `wanker`
+User password from playbook is `wanker` and it is not sensitive information
