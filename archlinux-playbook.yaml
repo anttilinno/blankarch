@@ -3,6 +3,11 @@
     become: yes
     hosts: archlinux
 
+    roles:
+      - role: gantsign.oh-my-zsh
+        users:
+          - username: antti
+
     tasks:
     - name: Remove virtualbox nox utils
       community.general.pacman:
@@ -66,13 +71,6 @@
       ansible.builtin.file:
         path: /home/antti/.bash_logout
         state: absent
-    - name: Checks for oh-my-zsh installation | stat
-      stat:
-        path: "/home/antti/.oh-my-zsh"
-      register: oh_my_zsh_stat
-    - name: Installs oh-my-zsh | raw
-      raw: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
-      when: not oh_my_zsh_stat.stat.exists
     - name: Create config directory for antti
       ansible.builtin.file:
         path: /home/antti/.config/i3
