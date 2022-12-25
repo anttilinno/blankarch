@@ -87,6 +87,13 @@
         group: antti
         mode: '0755'
         recurse: yes
+    - name: Create local bin directory
+      ansible.builtin.file:
+        path: /home/antti/.local/bin
+        state: directory
+        owner: antti
+        group: antti
+        mode: '0755'
     - name: Copy user dotconfig files
       ansible.builtin.copy:
         src: "{{ item }}"
@@ -114,6 +121,13 @@
       ansible.builtin.copy:
         src: config/starship.toml
         dest: /home/antti/.config/
+        owner: antti
+        group: antti
+        mode: u+rw,g-wx,o-wx
+    - name: Copy goto for user
+      ansible.builtin.copy:
+        src: bin/goto.sh
+        dest: /home/antti/.local/bin/
         owner: antti
         group: antti
         mode: u+rw,g-wx,o-wx
