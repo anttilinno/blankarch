@@ -33,6 +33,7 @@
           - bat
           - exa
           - virtualbox-guest-utils
+          - curl
         state: latest
         update_cache: true
     - name: Enable virtualbox service
@@ -53,6 +54,25 @@
         shell: /bin/zsh
         append: yes
         groups: wheel
+    - name: Remove bashrc
+      ansible.builtin.file:
+        path: /home/antti/.bashrc
+        state: absent
+    - name: Remove bash_profile
+      ansible.builtin.file:
+        path: /home/antti/.bash_profile
+        state: absent
+    - name: Remove bash_logout
+      ansible.builtin.file:
+        path: /home/antti/.bash_logout
+        state: absent
+    - name: Checks for oh-my-zsh installation | stat
+      stat:
+        path: "/home/antti/.oh-my-zsh"
+      register: oh_my_zsh_stat
+    - name: Installs oh-my-zsh | raw
+      raw: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+      when: not oh_my_zsh_stat.stat.exists
     - name: Create config directory for antti
       ansible.builtin.file:
         path: /home/antti/.config/i3
@@ -60,7 +80,7 @@
         owner: antti
         group: antti
         mode: '0755'
-        recursive: yes
+        recurse: yes
     - name: Create terminal config directory for antti
       ansible.builtin.file:
         path: /home/antti/.config/xfce4/terminal
@@ -68,17 +88,16 @@
         owner: antti
         group: antti
         mode: '0755'
-        recursive: yes
-    - name: Copy user root config files
+        recurse: yes
+    - name: Copy user dotconfig files
       ansible.builtin.copy:
-        src:
-          - config/.zshrc
-          - config/.zprofile
-          - config/.xinitrc
+        src: "{{ item }}"
         dest: /home/antti/
         owner: antti
         group: antti
         mode: u+rw,g-wx,o-wx
+      with_fileglob:
+        - config/dotfiles/.*
     - name: Copy wm config files for user
       ansible.builtin.copy:
         src: config/i3.config
