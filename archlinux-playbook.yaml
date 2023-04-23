@@ -3,11 +3,6 @@
     become: yes
     hosts: archlinux
 
-    roles:
-      - role: gantsign.oh-my-zsh
-        users:
-          - username: antti
-
     tasks:
     - name: Remove virtualbox nox utils
       community.general.pacman:
@@ -131,3 +126,16 @@
         owner: antti
         group: antti
         mode: u+rw,g-wx,o-wx
+    - name: Install Oh-My-Zsh
+      become_user: antti
+      git:
+        repo: https://github.com/robbyrussell/oh-my-zsh.git
+        dest: ~/.oh-my-zsh
+        clone: yes
+      register: oh_my_zsh_result
+    - name: Change default shell to Zsh
+      become_user: antti
+      shell: chsh -s $(which zsh)
+      args:
+        executable: /bin/bash
+      when: oh_my_zsh_result.changed == true
