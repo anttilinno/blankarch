@@ -34,6 +34,7 @@
           - exa
           - virtualbox-guest-utils
           - curl
+          - sudo
         state: latest
         update_cache: true
     - name: Enable virtualbox service
@@ -101,7 +102,7 @@
     - name: Copy wm config files for user
       ansible.builtin.copy:
         src: config/i3.config
-        dest: /home/antti/.config/i3/config/
+        dest: /home/antti/.config/i3/config
         owner: antti
         group: antti
         mode: u+rw,g-wx,o-wx
@@ -136,6 +137,4 @@
     - name: Change default shell to Zsh
       become_user: antti
       shell: chsh -s $(which zsh)
-      args:
-        executable: /bin/bash
       when: oh_my_zsh_result.changed == true
