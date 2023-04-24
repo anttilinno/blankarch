@@ -35,6 +35,8 @@
           - virtualbox-guest-utils
           - curl
           - sudo
+          - fakeroot
+          - which
         state: latest
         update_cache: true
     - name: Enable virtualbox service
@@ -138,3 +140,15 @@
       become_user: antti
       shell: chsh -s $(which zsh)
       when: oh_my_zsh_result.changed == true
+    - name: Clone yay
+      become_user: vagrant
+      git:
+        repo: https://aur.archlinux.org/yay-bin.git
+        dest: "/tmp/yay"
+        update: true
+    - name: Build and install yay
+      become_user: vagrant
+      command:
+        chdir: "/tmp/yay"
+        cmd: "makepkg -sfi --noconfirm"
+        creates: /usr/bin/yay
