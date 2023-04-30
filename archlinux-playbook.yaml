@@ -92,43 +92,49 @@
         owner: antti
         group: antti
         mode: '0755'
-    - name: Copy user dotconfig files
-      ansible.builtin.copy:
+    - name: Install config files
+      become_user: antti
+      git:
+        repo: https://github.com/anttilinno/configs.git
+        dest: ~/.configfiles
+        clone: yes
+    - name: Link user dotconfig files
+      ansible.builtin.file:
         src: "{{ item }}"
-        dest: /home/antti/
+        dest: /home/antti/{{ item }}
         owner: antti
         group: antti
-        mode: u+rw,g-wx,o-wx
+        state: link
       with_fileglob:
-        - config/dotfiles/.*
-    - name: Copy wm config files for user
-      ansible.builtin.copy:
-        src: config/i3.config
+        - /home/antti/.configfiles/dotfiles/.*
+    - name: Link wm config files for user
+      ansible.builtin.file:
+        src: /home/antti/.configfiles/i3.config
         dest: /home/antti/.config/i3/config
         owner: antti
         group: antti
-        mode: u+rw,g-wx,o-wx
-    - name: Copy terminal config files for user
-      ansible.builtin.copy:
-        src: config/terminalrc
-        dest: /home/antti/.config/xfce4/terminal/
+        state: link
+    - name: Link terminal config files for user
+      ansible.builtin.file:
+        src: /home/antti/.configfiles/terminalrc
+        dest: /home/antti/.config/xfce4/terminal/terminalrc
         owner: antti
         group: antti
-        mode: u+rw,g-wx,o-wx
-    - name: Copy starship config files for user
-      ansible.builtin.copy:
-        src: config/starship.toml
-        dest: /home/antti/.config/
+        state: link
+    - name: Link starship config files for user
+      ansible.builtin.file:
+        src: /home/antti/.configfiles/starship.toml
+        dest: /home/antti/.config/starship.toml
         owner: antti
         group: antti
-        mode: u+rw,g-wx,o-wx
-    - name: Copy goto for user
-      ansible.builtin.copy:
+        state: link
+    - name: Link goto for user
+      ansible.builtin.file:
         src: bin/goto.sh
-        dest: /home/antti/.local/bin/
+        dest: /home/antti/.local/bin/goto.sh
         owner: antti
         group: antti
-        mode: u+rw,g-wx,o-wx
+        state: link
     - name: Install Oh-My-Zsh
       become_user: antti
       git:
