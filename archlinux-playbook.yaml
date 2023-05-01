@@ -8,7 +8,7 @@
       community.general.pacman:
         name:
           - virtualbox-guest-utils-nox
-        state: removed
+        state: absent
         update_cache: true
     - name: Install base packages
       community.general.pacman:
@@ -169,3 +169,19 @@
         chdir: "/tmp/yay"
         cmd: "makepkg -sfi --noconfirm"
         creates: /usr/bin/yay
+    - name: Check if VSCodium is installed
+      stat:
+        path: /usr/bin/vscodium
+      register: vscodium_exists
+    - name: Install VSCodium using yay
+      become_user: vagrant
+      command:
+        cmd: "yay -S --noconfirm vscodium-bin"
+      when: not vscodium_exists.stat.exists
+    - name: Install Firefox
+      become: yes
+      community.general.pacman:
+        name:
+          - firefox
+        state: installed
+  
