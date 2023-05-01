@@ -115,6 +115,7 @@
         state: link
       with_items: "{{ dotfiles.files | map(attribute='path') }}"
     - name: Link wm config files for user
+      become_user: antti
       ansible.builtin.file:
         src: ~/.configfiles/config/i3.config
         dest: ~/.config/i3/config
@@ -122,6 +123,7 @@
         group: antti
         state: link
     - name: Link terminal config files for user
+      become_user: antti
       ansible.builtin.file:
         src: ~/.configfiles/config/terminalrc
         dest: ~/.config/xfce4/terminal/terminalrc
@@ -129,6 +131,7 @@
         group: antti
         state: link
     - name: Link starship config files for user
+      become_user: antti
       ansible.builtin.file:
         src: ~/.configfiles/config/starship.toml
         dest: ~/.config/starship.toml
@@ -136,6 +139,7 @@
         group: antti
         state: link
     - name: Link goto for user
+      become_user: antti
       ansible.builtin.file:
         src: ~/.configfiles/bin/goto.sh
         dest: ~/.local/bin/goto.sh
