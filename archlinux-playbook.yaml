@@ -98,40 +98,47 @@
         repo: https://github.com/anttilinno/configs.git
         dest: ~/.configfiles
         clone: yes
+        update: no
+    - name: Get dotfiles
+      become_user: antti
+      find:
+        path: /home/antti/.configfiles/config/dotfiles
+        hidden: yes
+      register: dotfiles
     - name: Link user dotconfig files
+      become_user: antti
       ansible.builtin.file:
         src: "{{ item }}"
-        dest: /home/antti/{{ item }}
+        dest: ~/{{ item | basename }}
         owner: antti
         group: antti
         state: link
-      with_fileglob:
-        - /home/antti/.configfiles/dotfiles/.*
+      with_items: "{{ dotfiles.files | map(attribute='path') }}"
     - name: Link wm config files for user
       ansible.builtin.file:
-        src: /home/antti/.configfiles/i3.config
-        dest: /home/antti/.config/i3/config
+        src: ~/.configfiles/config/i3.config
+        dest: ~/.config/i3/config
         owner: antti
         group: antti
         state: link
     - name: Link terminal config files for user
       ansible.builtin.file:
-        src: /home/antti/.configfiles/terminalrc
-        dest: /home/antti/.config/xfce4/terminal/terminalrc
+        src: ~/.configfiles/config/terminalrc
+        dest: ~/.config/xfce4/terminal/terminalrc
         owner: antti
         group: antti
         state: link
     - name: Link starship config files for user
       ansible.builtin.file:
-        src: /home/antti/.configfiles/starship.toml
-        dest: /home/antti/.config/starship.toml
+        src: ~/.configfiles/config/starship.toml
+        dest: ~/.config/starship.toml
         owner: antti
         group: antti
         state: link
     - name: Link goto for user
       ansible.builtin.file:
-        src: bin/goto.sh
-        dest: /home/antti/.local/bin/goto.sh
+        src: ~/.configfiles/bin/goto.sh
+        dest: ~/.local/bin/goto.sh
         owner: antti
         group: antti
         state: link
@@ -143,8 +150,8 @@
         clone: yes
       register: oh_my_zsh_result
     - name: Change default shell to Zsh
-      become_user: antti
-      shell: chsh -s $(which zsh)
+      become: yes
+      shell: chsh -s $(which zsh) antti
       when: oh_my_zsh_result.changed == true
     - name: Clone yay
       become_user: vagrant
