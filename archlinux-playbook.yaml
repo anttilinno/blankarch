@@ -37,6 +37,7 @@
           - sudo
           - fakeroot
           - which
+          - make
         state: latest
         update_cache: true
     - name: Enable virtualbox service
@@ -157,27 +158,24 @@
       become: yes
       shell: chsh -s $(which zsh) antti
       when: oh_my_zsh_result.changed == true
-    - name: Clone yay
+    - name: Clone pikaur
       become_user: vagrant
       git:
-        repo: https://aur.archlinux.org/yay-bin.git
-        dest: "/tmp/yay"
+        repo: https://aur.archlinux.org/pikaur.git
+        dest: "/tmp/pikaur"
         update: true
-    - name: Build and install yay
+    - name: Build and install pikaur
       become_user: vagrant
       command:
-        chdir: "/tmp/yay"
-        cmd: "makepkg -sfi --noconfirm"
-        creates: /usr/bin/yay
-    - name: Check if VSCodium is installed
-      stat:
-        path: /usr/bin/vscodium
-      register: vscodium_exists
+        chdir: "/tmp/pikaur"
+        cmd: "makepkg -fsri --noconfirm"
+        creates: /usr/bin/pikaur
     - name: Install VSCodium using yay
       become_user: vagrant
-      command:
-        cmd: "yay -S --noconfirm vscodium-bin"
-      when: not vscodium_exists.stat.exists
+      community.general.pacman:
+        name: vscodium-bin
+        state: installed
+        executable: pikaur
     - name: Install Firefox
       become: yes
       community.general.pacman:
