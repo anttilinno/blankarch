@@ -158,28 +158,30 @@
       become: yes
       shell: chsh -s $(which zsh) antti
       when: oh_my_zsh_result.changed == true
-    - name: Clone pikaur
+    - name: Clone yay
       become_user: vagrant
       git:
-        repo: https://aur.archlinux.org/pikaur.git
-        dest: "/tmp/pikaur"
+        repo: https://aur.archlinux.org/yay-bin.git
+        dest: "/tmp/yay"
         update: true
-    - name: Build and install pikaur
+    - name: Build and install yay
       become_user: vagrant
       command:
-        chdir: "/tmp/pikaur"
-        cmd: "makepkg -fsri --noconfirm"
-        creates: /usr/bin/pikaur
+        chdir: "/tmp/yay"
+        cmd: "makepkg -sfi --noconfirm"
+        creates: /usr/bin/yay
+    - name: Check if VSCodium is installed
+      stat:
+        path: /usr/bin/vscodium
+      register: vscodium_exists
     - name: Install VSCodium using yay
       become_user: vagrant
-      community.general.pacman:
-        name: vscodium-bin
-        state: installed
-        executable: pikaur
+      command:
+        cmd: "yay -S --noconfirm vscodium-bin"
+      when: not vscodium_exists.stat.exists
     - name: Install Firefox
       become: yes
       community.general.pacman:
         name:
           - firefox
         state: installed
-  
