@@ -199,7 +199,6 @@
       command:
         cmd: "yay -S --noconfirm vscodium-bin"
       when: not vscodium_exists.stat.exists
-
     - name: Install Firefox
       become: yes
       community.general.pacman:
