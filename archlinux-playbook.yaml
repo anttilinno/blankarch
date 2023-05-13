@@ -28,7 +28,7 @@
           - noto-fonts-emoji
           - xsel
           - httpie
-          - ttf-jetbrains-mono
+          - ttf-hack-nerd
           - ripgrep
           - bat
           - exa
@@ -42,8 +42,11 @@
         update_cache: true
     - name: Ensure a locale exists
       community.general.locale_gen:
-        name: en_US.UTF-8
+        name: "{{ item }}"
         state: present
+      with_items:
+        - en_US.UTF-8
+        - et_EE.UTF-8
     - name: Enable virtualbox service
       ansible.builtin.service:
         name: vboxservice
