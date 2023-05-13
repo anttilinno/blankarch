@@ -37,6 +37,7 @@
           - sudo
           - fakeroot
           - which
+          - make
         state: latest
         update_cache: true
     - name: Ensure a locale exists
@@ -84,6 +85,14 @@
     - name: Create terminal config directory for antti
       ansible.builtin.file:
         path: /home/antti/.config/xfce4/terminal
+        state: directory
+        owner: antti
+        group: antti
+        mode: '0755'
+        recurse: yes
+    - name: Create vscodium config directory for antti
+      ansible.builtin.file:
+        path: /home/antti/.config/VSCodium/User
         state: directory
         owner: antti
         group: antti
@@ -150,6 +159,14 @@
         owner: antti
         group: antti
         state: link
+    - name: Link vsconfig config files for user
+      become_user: antti
+      ansible.builtin.file:
+        src: ~/.configfiles/config/settings.json
+        dest: ~/.config/VSCodium/User/settings.json
+        owner: antti
+        group: antti
+        state: link
     - name: Install Oh-My-Zsh
       become_user: antti
       git:
@@ -182,6 +199,7 @@
       command:
         cmd: "yay -S --noconfirm vscodium-bin"
       when: not vscodium_exists.stat.exists
+
     - name: Install Firefox
       become: yes
       community.general.pacman:
