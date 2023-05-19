@@ -38,8 +38,13 @@
           - fakeroot
           - which
           - make
+          - docker
         state: latest
         update_cache: true
+    - name: Enable service docker
+      ansible.builtin.service:
+        name: docker
+        enabled: yes
     - name: Ensure a locale exists
       community.general.locale_gen:
         name: "{{ item }}"
