@@ -69,7 +69,7 @@
         password: $6$AGa1f5P0XzaHiqeg$qkhjY9T1FMQPnObqRZOgmfFB7GZym615vn5i1ccV3CpW2NSAOge4zmvwL6H5F43zBKXgMoWfLJoAsj6Ku2SSE1
         shell: /bin/zsh
         append: yes
-        groups: wheel
+        groups: "wheel, docker"
     - name: Remove bashrc
       ansible.builtin.file:
         path: /home/antti/.bashrc
