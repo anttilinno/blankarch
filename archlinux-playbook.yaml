@@ -39,6 +39,7 @@
           - which
           - make
           - docker
+          - docker-compose
         state: latest
         update_cache: true
     - name: Enable service docker
