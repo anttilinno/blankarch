@@ -37,6 +37,7 @@
           - make
           - docker
           - docker-compose
+          - ttf-jetbrains-mono-nerd
         state: latest
         update_cache: true
     - name: Enable service docker
