@@ -20,15 +20,12 @@
           - xorg-server
           - xorg-xinit
           - xf86-video-vmware
-          - i3-gaps
+          - i3-wm
           - i3status
-          - xfce4-terminal
+          - terminator
           - rofi
-          - starship
-          - noto-fonts-emoji
           - xsel
           - httpie
-          - ttf-hack-nerd
           - ripgrep
           - bat
           - exa
@@ -91,22 +88,6 @@
         group: antti
         mode: '0755'
         recurse: yes
-    - name: Create terminal config directory for antti
-      ansible.builtin.file:
-        path: /home/antti/.config/xfce4/terminal
-        state: directory
-        owner: antti
-        group: antti
-        mode: '0755'
-        recurse: yes
-    - name: Create vscodium config directory for antti
-      ansible.builtin.file:
-        path: /home/antti/.config/VSCodium/User
-        state: directory
-        owner: antti
-        group: antti
-        mode: '0755'
-        recurse: yes
     - name: Create local bin directory
       ansible.builtin.file:
         path: /home/antti/.local/bin
@@ -144,35 +125,11 @@
         owner: antti
         group: antti
         state: link
-    - name: Link terminal config files for user
-      become_user: antti
-      ansible.builtin.file:
-        src: ~/.configfiles/config/terminalrc
-        dest: ~/.config/xfce4/terminal/terminalrc
-        owner: antti
-        group: antti
-        state: link
-    - name: Link starship config files for user
-      become_user: antti
-      ansible.builtin.file:
-        src: ~/.configfiles/config/starship.toml
-        dest: ~/.config/starship.toml
-        owner: antti
-        group: antti
-        state: link
     - name: Link goto for user
       become_user: antti
       ansible.builtin.file:
         src: ~/.configfiles/bin/goto.sh
         dest: ~/.local/bin/goto.sh
-        owner: antti
-        group: antti
-        state: link
-    - name: Link vsconfig config files for user
-      become_user: antti
-      ansible.builtin.file:
-        src: ~/.configfiles/config/settings.json
-        dest: ~/.config/VSCodium/User/settings.json
         owner: antti
         group: antti
         state: link
@@ -199,18 +156,12 @@
         chdir: "/tmp/yay"
         cmd: "makepkg -sfi --noconfirm"
         creates: /usr/bin/yay
-    - name: Check if VSCodium is installed
+    - name: Check if Librewolf is installed
       stat:
-        path: /usr/bin/vscodium
-      register: vscodium_exists
-    - name: Install VSCodium using yay
+        path: /usr/bin/librewolf
+      register: librewolf_exists
+    - name: Install Librewolf using yay
       become_user: vagrant
       command:
-        cmd: "yay -S --noconfirm vscodium-bin"
-      when: not vscodium_exists.stat.exists
-    - name: Install Firefox
-      become: yes
-      community.general.pacman:
-        name:
-          - firefox
-        state: installed
+        cmd: "yay -S --noconfirm librewolf-bin"
+      when: not librewolf_exists.stat.exists
