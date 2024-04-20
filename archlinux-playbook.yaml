@@ -38,6 +38,7 @@
           - docker
           - docker-compose
           - ttf-jetbrains-mono-nerd
+          - unzip
         state: latest
         update_cache: true
     - name: Enable service docker
