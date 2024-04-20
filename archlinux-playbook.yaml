@@ -81,9 +81,17 @@
       ansible.builtin.file:
         path: /home/antti/.bash_logout
         state: absent
-    - name: Create config directory for antti
+    - name: Create i3 config directory for antti
       ansible.builtin.file:
         path: /home/antti/.config/i3
+        state: directory
+        owner: antti
+        group: antti
+        mode: '0755'
+        recurse: yes
+    - name: Create terminator config directory for antti
+      ansible.builtin.file:
+        path: /home/antti/.config/terminator
         state: directory
         owner: antti
         group: antti
@@ -123,6 +131,14 @@
       ansible.builtin.file:
         src: ~/.configfiles/config/i3.config
         dest: ~/.config/i3/config
+        owner: antti
+        group: antti
+        state: link
+    - name: Link console config files for user
+      become_user: antti
+      ansible.builtin.file:
+        src: ~/.configfiles/config/terminator_config
+        dest: ~/.config/terminator/config
         owner: antti
         group: antti
         state: link
