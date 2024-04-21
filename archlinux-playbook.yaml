@@ -38,6 +38,7 @@
           - docker
           - docker-compose
           - ttf-jetbrains-mono-nerd
+          - noto-fonts-emoji
           - unzip
         state: latest
         update_cache: true
