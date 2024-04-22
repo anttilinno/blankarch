@@ -152,6 +152,22 @@
         owner: antti
         group: antti
         state: link
+    - name: Link goto config for user
+      become_user: antti
+      ansible.builtin.file:
+        src: ~/.configfiles/config/goto
+        dest: ~/.config/goto
+        owner: antti
+        group: antti
+        state: link
+    - name: Link nvim config for user
+      become_user: antti
+      ansible.builtin.file:
+        src: ~/.configfiles/config/nvim
+        dest: ~/.config/nvim
+        owner: antti
+        group: antti
+        state: link
     - name: Install Oh-My-Zsh
       become_user: antti
       git:
