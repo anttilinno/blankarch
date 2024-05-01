@@ -40,6 +40,7 @@
           - ttf-jetbrains-mono-nerd
           - noto-fonts-emoji
           - unzip
+          - lazygit
         state: latest
         update_cache: true
     - name: Enable service docker
