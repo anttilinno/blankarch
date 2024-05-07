@@ -42,6 +42,7 @@
           - unzip
           - lazygit
           - fd
+          - btop
         state: latest
         update_cache: true
     - name: Enable service docker
