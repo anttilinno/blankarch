@@ -22,7 +22,7 @@
           - xf86-video-vmware
           - i3-wm
           - i3status
-          - terminator
+          - xfce4-terminal
           - rofi
           - xsel
           - httpie
@@ -35,8 +35,6 @@
           - fakeroot
           - which
           - make
-          - docker
-          - docker-compose
           - ttf-jetbrains-mono-nerd
           - noto-fonts-emoji
           - unzip
@@ -45,10 +43,6 @@
           - btop
         state: latest
         update_cache: true
-    - name: Enable service docker
-      ansible.builtin.service:
-        name: docker
-        enabled: yes
     - name: Ensure a locale exists
       community.general.locale_gen:
         name: "{{ item }}"
@@ -73,7 +67,7 @@
         password: $6$AGa1f5P0XzaHiqeg$qkhjY9T1FMQPnObqRZOgmfFB7GZym615vn5i1ccV3CpW2NSAOge4zmvwL6H5F43zBKXgMoWfLJoAsj6Ku2SSE1
         shell: /bin/zsh
         append: yes
-        groups: "wheel, docker"
+        groups: "wheel"
     - name: Remove bashrc
       ansible.builtin.file:
         path: /home/antti/.bashrc
@@ -102,13 +96,6 @@
         group: antti
         mode: '0755'
         recurse: yes
-    - name: Create local bin directory
-      ansible.builtin.file:
-        path: /home/antti/.local/bin
-        state: directory
-        owner: antti
-        group: antti
-        mode: '0755'
     - name: Install config files
       become_user: antti
       git:
@@ -139,45 +126,6 @@
         owner: antti
         group: antti
         state: link
-    - name: Link console config files for user
-      become_user: antti
-      ansible.builtin.file:
-        src: ~/.configfiles/config/terminator_config
-        dest: ~/.config/terminator/config
-        owner: antti
-        group: antti
-        state: link
-    - name: Link goto for user
-      become_user: antti
-      ansible.builtin.file:
-        src: ~/.configfiles/bin/goto.sh
-        dest: ~/.local/bin/goto.sh
-        owner: antti
-        group: antti
-        state: link
-    - name: Link goto config for user
-      become_user: antti
-      ansible.builtin.file:
-        src: ~/.configfiles/config/goto
-        dest: ~/.config/goto
-        owner: antti
-        group: antti
-        state: link
-    - name: Link nvim config for user
-      become_user: antti
-      ansible.builtin.file:
-        src: ~/.configfiles/config/nvim
-        dest: ~/.config/nvim
-        owner: antti
-        group: antti
-        state: link
-    - name: Install Oh-My-Zsh
-      become_user: antti
-      git:
-        repo: https://github.com/robbyrussell/oh-my-zsh.git
-        dest: ~/.oh-my-zsh
-        clone: yes
-      register: oh_my_zsh_result
     - name: Change default shell to Zsh
       become: yes
       shell: chsh -s $(which zsh) antti
@@ -194,12 +142,3 @@
         chdir: "/tmp/yay"
         cmd: "makepkg -sfi --noconfirm"
         creates: /usr/bin/yay
-    - name: Check if Librewolf is installed
-      stat:
-        path: /usr/bin/librewolf
-      register: librewolf_exists
-    - name: Install Librewolf using yay
-      become_user: vagrant
-      command:
-        cmd: "yay -S --noconfirm librewolf-bin"
-      when: not librewolf_exists.stat.exists
