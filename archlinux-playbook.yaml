@@ -33,14 +33,13 @@
           - curl
           - sudo
           - fakeroot
-          - which
-          - make
           - ttf-jetbrains-mono-nerd
           - noto-fonts-emoji
           - unzip
           - lazygit
           - fd
           - btop
+          - chezmoi
         state: latest
         update_cache: true
     - name: Ensure a locale exists
@@ -88,48 +87,9 @@
         group: antti
         mode: '0755'
         recurse: yes
-    - name: Create terminator config directory for antti
-      ansible.builtin.file:
-        path: /home/antti/.config/terminator
-        state: directory
-        owner: antti
-        group: antti
-        mode: '0755'
-        recurse: yes
-    - name: Install config files
-      become_user: antti
-      git:
-        repo: https://github.com/anttilinno/configs.git
-        dest: ~/.configfiles
-        clone: yes
-        update: no
-    - name: Get dotfiles
-      become_user: antti
-      find:
-        path: /home/antti/.configfiles/config/dotfiles
-        hidden: yes
-      register: dotfiles
-    - name: Link user dotconfig files
-      become_user: antti
-      ansible.builtin.file:
-        src: "{{ item }}"
-        dest: ~/{{ item | basename }}
-        owner: antti
-        group: antti
-        state: link
-      with_items: "{{ dotfiles.files | map(attribute='path') }}"
-    - name: Link wm config files for user
-      become_user: antti
-      ansible.builtin.file:
-        src: ~/.configfiles/config/i3.config
-        dest: ~/.config/i3/config
-        owner: antti
-        group: antti
-        state: link
     - name: Change default shell to Zsh
       become: yes
       shell: chsh -s $(which zsh) antti
-      when: oh_my_zsh_result.changed == true
     - name: Clone yay
       become_user: vagrant
       git:
