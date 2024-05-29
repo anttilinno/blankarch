@@ -40,6 +40,8 @@
           - fd
           - btop
           - chezmoi
+          - fzf
+          - zoxide
         state: latest
         update_cache: true
     - name: Ensure a locale exists
