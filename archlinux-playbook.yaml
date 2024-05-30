@@ -68,7 +68,7 @@
         password: $6$AGa1f5P0XzaHiqeg$qkhjY9T1FMQPnObqRZOgmfFB7GZym615vn5i1ccV3CpW2NSAOge4zmvwL6H5F43zBKXgMoWfLJoAsj6Ku2SSE1
         shell: /bin/zsh
         append: yes
-        groups: "wheel"
+        groups: "wheel, docker"
     - name: Remove bashrc
       ansible.builtin.file:
         path: /home/antti/.bashrc
@@ -81,14 +81,6 @@
       ansible.builtin.file:
         path: /home/antti/.bash_logout
         state: absent
-    - name: Create i3 config directory for antti
-      ansible.builtin.file:
-        path: /home/antti/.config/i3
-        state: directory
-        owner: antti
-        group: antti
-        mode: '0755'
-        recurse: yes
     - name: Change default shell to Zsh
       become: yes
       shell: chsh -s $(which zsh) antti
@@ -97,10 +89,16 @@
       git:
         repo: https://aur.archlinux.org/yay-bin.git
         dest: "/tmp/yay"
-        update: true
+        clone: yes
+      when: ansible_facts['pkg_mgr'] == 'pacman' and not ansible_facts['pkg_mgr_installed_packages'] | selectattr('name', 'eq', 'yay') | list
     - name: Build and install yay
       become_user: vagrant
       command:
         chdir: "/tmp/yay"
         cmd: "makepkg -sfi --noconfirm"
         creates: /usr/bin/yay
+      when: ansible_facts['pkg_mgr'] == 'pacman' and not ansible_facts['pkg_mgr_installed_packages'] | selectattr('name', 'eq', 'yay') | list
+    - name: Install Floorp using yay
+      ansible.builtin.command:
+        cmd: yay -S floorp-bin --noconfirm
+      when: ansible_facts['pkg_mgr'] == 'pacman'
