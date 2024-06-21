@@ -1,18 +1,12 @@
 # Start
 Follow up to the [vagrant repository](https://github.com/anttilinno/arch-vagrant)
 
-* Run ansible after blank install
+* Install archlinux packages and docker
 	```
-	ansible-playbook -i inventory.yaml archlinux-playbook.yaml --limit "archlinux"
+    ansible-playbook setup.yml
 	```
 
 *User password from playbook is `wanker` and it is not sensitive information*
-
-* Install docker
-
-    ```
-    ansible-playbook -i inventory.yml playbook.yml --limit "docker"
-    ```
 
 ## Tools to install manually currently
 

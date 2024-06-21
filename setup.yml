@@ -1,0 +1,14 @@
+---
+- name: "Setup ArchLinux developing environment"
+  become: yes
+  hosts: archlinux
+
+  roles:
+    - archlinux
+
+- name: "Setup Docker environment"
+  become: yes
+  hosts: docker
+
+  roles:
+    - docker
