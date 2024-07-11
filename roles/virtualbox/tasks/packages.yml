@@ -1,0 +1,20 @@
+---
+- name: Remove virtualbox nox utils
+  community.general.pacman:
+    name:
+      - virtualbox-guest-utils-nox
+    state: absent
+    update_cache: true
+
+- name: Install base packages
+  community.general.pacman:
+    name:
+      - xf86-video-vmware
+      - virtualbox-guest-utils
+    state: latest
+    update_cache: true
+
+- name: Enable virtualbox service
+  ansible.builtin.service:
+    name: vboxservice
+    state: started

@@ -1,0 +1,9 @@
+---
+- name: Gather facts
+  ansible.builtin.setup:
+
+- name: Gather package facts
+  ansible.builtin.package_facts:
+
+- name: Include package tasks
+  include_tasks: packages.yml

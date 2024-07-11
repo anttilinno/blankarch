@@ -6,9 +6,11 @@
   roles:
     - archlinux
 
-- name: "Setup Docker environment"
+- name: "Setup VirtualBox"
   become: yes
-  hosts: docker
+  hosts: virtualbox
 
   roles:
-    - docker
+    - virtualbox
+
+

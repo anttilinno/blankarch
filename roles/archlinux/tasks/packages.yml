@@ -1,11 +1,4 @@
 ---
-- name: Remove virtualbox nox utils
-  community.general.pacman:
-    name:
-      - virtualbox-guest-utils-nox
-    state: absent
-    update_cache: true
-
 - name: Install base packages
   community.general.pacman:
     name:
@@ -15,17 +8,15 @@
       - zsh
       - xorg-server
       - xorg-xinit
-      - xf86-video-vmware
       - i3-wm
       - i3status
-      - xfce4-terminal
+      - wezterm
       - rofi
       - xsel
       - httpie
       - ripgrep
       - bat
       - exa
-      - virtualbox-guest-utils
       - curl
       - sudo
       - fakeroot
@@ -38,6 +29,7 @@
       - chezmoi
       - fzf
       - zoxide
+      - starship
     state: latest
     update_cache: true
 
@@ -49,28 +41,24 @@
     - en_US.UTF-8
     - et_EE.UTF-8
 
-- name: Enable virtualbox service
-  ansible.builtin.service:
-    name: vboxservice
-    state: started
+- name: Clone yay repository
+  ansible.builtin.git:
+    repo: "https://aur.archlinux.org/yay.git"
+    dest: "/home/vagrant/yay"
+    clone: yes
+    update: no
+    force: yes
+    version: "master"
 
-- name: Install yay if not already installed
-  block:
-    - name: Clone yay
-      become_user: "{{ ansible_env.USER }}"
-      git:
-        repo: https://aur.archlinux.org/yay-bin.git
-        dest: "/tmp/yay"
-        clone: yes
-    - name: Build and install yay
-      become_user: "{{ ansible_env.USER }}"
-      command:
-        chdir: "/tmp/yay"
-        cmd: "makepkg -sfi --noconfirm"
-        creates: /usr/bin/yay
-  when: "'yay' not in ansible_facts.packages"
+- name: Change ownership of yay directory to vagrant
+  ansible.builtin.command: chown -R vagrant:vagrant /home/vagrant/yay
 
-- name: Install Floorp using yay
-  ansible.builtin.command:
-    cmd: yay -S floorp-bin --noconfirm
-  when: "'yay' in ansible_facts.packages"
+- name: Build and install yay
+  ansible.builtin.shell: |
+    cd /home/vagrant/yay
+    makepkg -si --noconfirm
+  args:
+    chdir: /home/vagrant/yay
+  become: yes
+  become_user: vagrant
+

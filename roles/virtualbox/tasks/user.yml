@@ -1,0 +1,35 @@
+---
+- name: Modify sudoers file
+  ansible.builtin.copy:
+    content: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    dest: /etc/sudoers.d/wheel
+    mode: '0400'
+    owner: root
+    group: root
+
+- name: Add user antti
+  ansible.builtin.user:
+    name: antti
+    password: $6$AGa1f5P0XzaHiqeg$qkhjY9T1FMQPnObqRZOgmfFB7GZym615vn5i1ccV3CpW2NSAOge4zmvwL6H5F43zBKXgMoWfLJoAsj6Ku2SSE1
+    shell: /bin/zsh
+    append: yes
+    groups: "wheel"
+
+- name: Remove bashrc
+  ansible.builtin.file:
+    path: /home/antti/.bashrc
+    state: absent
+
+- name: Remove bash_profile
+  ansible.builtin.file:
+    path: /home/antti/.bash_profile
+    state: absent
+
+- name: Remove bash_logout
+  ansible.builtin.file:
+    path: /home/antti/.bash_logout
+    state: absent
+
+- name: Change default shell to Zsh
+  become: yes
+  shell: chsh -s $(which zsh) antti

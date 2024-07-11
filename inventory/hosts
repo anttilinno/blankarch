@@ -3,3 +3,6 @@ localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python
 
 [docker]
 localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python
+
+[virtualbox]
+localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python
